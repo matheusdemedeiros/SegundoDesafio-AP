@@ -29,7 +29,6 @@ namespace SegundoDesafio.ConsoleApp
 
                 input = Console.ReadLine();
 
-
                 if (input == "s" || input == "S")
                 {
                     Console.ForegroundColor = ConsoleColor.Cyan;
