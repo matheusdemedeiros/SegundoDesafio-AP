@@ -14,138 +14,200 @@ namespace SegundoDesafio.ConsoleApp
     {
         public static void Main()
         {
-            int inputNumeric, qtdSpaces, qtdSimbols;
-            string s = "", simbol = "X", spaces = " ", line = "", input;
-            bool isInputNumeric = false;
+            #region Declaração de variáveis
+            int inputNumerico, qtdEspacos = 1, qtdSimbolos;
+            string simbolo = "X", linha = "", input;
+            bool EhInputNumerico = false;
+            #endregion
 
             Console.WriteLine("=======================================================================");
             Console.WriteLine("OLÁ, SEJA BEM VINDO AO SISTEMA DE GERAÇÃO DE DIAMANTES!!");
 
             do
             {
-                Console.WriteLine("\n** Digite S para sair;");
-                Console.WriteLine("** Ou digite um número ímpar para construir o diamante;");
-                Console.Write("Digite aqui: ");
+                ApresentarMenuOpcoes();
 
                 input = Console.ReadLine();
 
                 if (input == "s" || input == "S")
                 {
-                    Console.ForegroundColor = ConsoleColor.Cyan;
-                    Console.WriteLine("\n=======================================================================");
-                    Console.WriteLine("\nVOCÊ ESCOLHEU SAIR!!\n");
-                    Console.ResetColor();
+                    ApresentarMensagem("\nVOCÊ ESCOLHEU SAIR!!\n", ConsoleColor.Cyan);
                     break;
                 }
-                else if (isInputNumeric = int.TryParse(input, out int resultInput))
+
+                else if (EhInputNumerico = int.TryParse(input, out int inputNumericoConvertido))
                 {
-
-                    if (isInputNumeric)
+                    if (EhInputNumerico)
                     {
-                        inputNumeric = resultInput;
+                        inputNumerico = inputNumericoConvertido;
 
-                        if (inputNumeric <= 0)
+                        if (inputNumerico <= 0)
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("\n=======================================================================");
-                            Console.WriteLine("INFORME SOMENTE NÚMEROS POSITIVOS!! TENTE NOVAMENTE!!");
-                            Console.ResetColor();
+                            ApresentarMensagem("INFORME SOMENTE NÚMEROS POSITIVOS!! TENTE NOVAMENTE!!", ConsoleColor.Red);
                             continue;
                         }
+
+                        else if (EhImpar(inputNumerico))
+                        {
+
+                            Console.WriteLine("\n");
+                            Console.ForegroundColor = ConsoleColor.Green;
+
+                            #region Código que desenha a parte de cima do diamante
+
+                            qtdSimbolos = 1;
+
+                            while (qtdSimbolos < inputNumerico)
+                            {
+                                qtdEspacos = DefininirQuantidadeEspacos(inputNumerico, qtdSimbolos);
+
+                                linha = AdicionandoEspacosEmBrancoNaLinha(qtdEspacos, linha);
+
+                                linha = AdicionandoSimbolosNaLinha(qtdSimbolos, linha, simbolo);
+
+                                PrintarLinhaEmTela(linha);
+
+                                linha = LimparLinha();
+
+                                qtdSimbolos = IncrementarQuantidadeDeSimbolos(qtdSimbolos);
+
+                            }
+
+                            #endregion
+
+                            #region Código que desenha a parte do meio do diamante
+
+                            if (qtdSimbolos == inputNumerico)
+                            {
+                                linha = AdicionandoSimbolosNaLinha(qtdSimbolos, linha, simbolo);
+
+                                PrintarLinhaEmTela(linha);
+
+                                qtdSimbolos = DecrementarQuantidadeDeSimbolos(qtdSimbolos);
+
+                                linha = LimparLinha();
+                            }
+
+                            #endregion
+
+                            #region Código que desenha a parte de baixo do diamante
+
+                            while (qtdSimbolos >= 1)
+                            {
+                                qtdEspacos = DefininirQuantidadeEspacos(inputNumerico, qtdSimbolos);
+
+                                linha = AdicionandoEspacosEmBrancoNaLinha(qtdEspacos, linha);
+
+                                linha = AdicionandoSimbolosNaLinha(qtdSimbolos, linha, simbolo);
+
+                                PrintarLinhaEmTela(linha);
+
+                                linha = LimparLinha();
+
+                                qtdSimbolos = DecrementarQuantidadeDeSimbolos(qtdSimbolos);
+
+                            }
+
+                            #endregion
+
+                            Console.ResetColor();
+                        }
+
                         else
                         {
-                            if ((inputNumeric % 2) != 0)
-                            {
-                                Console.WriteLine("\n");
-                                Console.ForegroundColor = ConsoleColor.Green;
-                                qtdSimbols = 1;
-
-                                for (int i = 0; i < inputNumeric; i++)
-                                {
-
-                                    qtdSpaces = (inputNumeric - qtdSimbols) / 2;
-
-                                    for (int j = 0; j < qtdSpaces; j++)
-                                    {
-
-                                        line += spaces;
-                                    }
-
-                                    for (int k = 0; k < qtdSimbols; k++)
-                                    {
-                                        s += simbol;
-                                    }
-
-                                    qtdSimbols += 2;
-                                    line += s;
-                                    if ((line.Length > 0) && line.Contains("X"))
-                                    {
-                                        Console.WriteLine(line);
-                                    }
-                                    else
-                                    {
-                                        break;
-                                    }
-
-                                    line = "";
-                                    s = "";
-
-                                    if (qtdSimbols == inputNumeric)
-                                    {
-
-                                        for (int l = inputNumeric; l >= 1; l--)
-                                        {
-                                            qtdSpaces = (inputNumeric - qtdSimbols) / 2;
-
-                                            for (int j = 0; j < qtdSpaces; j++)
-                                            {
-                                                line += spaces;
-                                            }
-                                            for (int k = 0; k < qtdSimbols; k++)
-                                            {
-                                                s += simbol;
-                                            }
-
-                                            qtdSimbols -= 2;
-                                            line += s;
-                                            if ((line.Length > 0) && line.Contains("X"))
-                                            {
-                                                Console.WriteLine(line);
-                                            }
-                                            else
-                                            {
-                                                break;
-                                            }
-
-                                            line = "";
-                                            s = "";
-                                        }
-                                    }
-                                }
-
-                                Console.ResetColor();
-                            }
-                            else
-                            {
-                                Console.ForegroundColor = ConsoleColor.Yellow;
-                                Console.WriteLine("\n=======================================================================");
-                                Console.WriteLine("INFORME SOMENTE NÚMEROS ÍMPARES!! TENTE NOVAMENTE!!");
-                                Console.ResetColor();
-                                continue;
-                            }
+                            ApresentarMensagem("INFORME SOMENTE NÚMEROS ÍMPARES!! TENTE NOVAMENTE!!", ConsoleColor.Yellow);
+                            continue;
                         }
                     }
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\n=======================================================================");
-                    Console.WriteLine("ENTRADA INVÁLIDA!! TENTE NOVAMENTE!!");
-                    Console.ResetColor();
+                    ApresentarMensagem("ENTRADA INVÁLIDA!! TENTE NOVAMENTE!!", ConsoleColor.Red);
                     continue;
                 }
 
+
             } while (input != "s" || input != "S");
+
+        }
+        static int DefininirQuantidadeEspacos(int inputNumericoAtual, int qtdSimbolos)
+        {
+            int retorno = (inputNumericoAtual - qtdSimbolos) / 2;
+            return retorno;
+        }
+
+        static bool EhImpar(int inputNumerico)
+        {
+            bool retorno = false;
+            if ((inputNumerico % 2) != 0)
+            {
+                retorno = true;
+            }
+            else
+            {
+                retorno = false;
+            }
+            return retorno;
+
+        }
+
+        static void ApresentarMensagem(string mensagem, ConsoleColor cor)
+        {
+            Console.ForegroundColor = cor;
+            Console.WriteLine("\n=======================================================================");
+            Console.WriteLine(mensagem);
+            Console.ResetColor();
+        }
+
+        static string AdicionandoEspacosEmBrancoNaLinha(int quantidadeEspacos, string linha)
+        {
+            for (int j = 0; j < quantidadeEspacos; j++)
+            {
+                linha += " ";
+            }
+            string retorno = linha;
+
+            return retorno;
+        }
+
+        static string AdicionandoSimbolosNaLinha(int quantidadeSimbolos, string linha, string simbolo)
+        {
+            for (int j = 0; j < quantidadeSimbolos; j++)
+            {
+                linha += simbolo;
+            }
+            string retorno = linha;
+
+            return retorno;
+        }
+
+        static string LimparLinha()
+        {
+            return "";
+        }
+
+        static int IncrementarQuantidadeDeSimbolos(int quantidadeSimbolos)
+        {
+            int retorno = quantidadeSimbolos + 2;
+            return retorno;
+        }
+
+        static int DecrementarQuantidadeDeSimbolos(int quantidadeSimbolos)
+        {
+            int retorno = quantidadeSimbolos - 2;
+            return retorno;
+        }
+
+        static void PrintarLinhaEmTela(string linha)
+        {
+            Console.WriteLine(linha);
+        }
+
+        static void ApresentarMenuOpcoes()
+        {
+            Console.WriteLine("\n** Digite S para sair;");
+            Console.WriteLine("** Ou digite um número ímpar para construir o diamante;");
+            Console.Write("Digite aqui: ");
         }
     }
 }
